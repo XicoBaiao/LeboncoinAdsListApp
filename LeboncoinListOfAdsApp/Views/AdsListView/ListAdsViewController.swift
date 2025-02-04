@@ -97,5 +97,12 @@ extension ListAdsViewController: UICollectionViewDataSource, UICollectionViewDel
         cell.configure(with: ad, categoryName: categoryName ?? "")
         return cell
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let ad = viewModel.ads[indexPath.row]
+        let adDetailView = AdDetailView(ad: ad, categoryName: viewModel.categories.first(where: { $0.id == ad.categoryId })?.name ?? "")
+        let hostingController = UIHostingController(rootView: adDetailView)
+        navigationController?.pushViewController(hostingController, animated: true)
+    }
 }
 
