@@ -8,19 +8,26 @@
 import Foundation
 import SwiftUI
 
+// ViewModel responsible for managing the state of ads and categories.
 class AdsViewModel {
+    // List of ads
     var ads: [Ad] = [] {
         didSet {
             reloadTableView?()
         }
     }
+
+    // List of categories
     var categories: [Category] = []
+
+    // Tracks errors and notifies the UI
     var errorMessage: String? {
         didSet {
             showErrorMessage?(errorMessage)
         }
     }
 
+    // Tracks whether data is being loaded
     var isLoading: Bool = false {
         didSet {
             updateLoadingState?(isLoading)
@@ -29,6 +36,7 @@ class AdsViewModel {
 
     private let apiService: APIServiceProtocol
 
+    // Callbacks to update UI
     var reloadTableView: (() -> Void)?
     var showErrorMessage: ((String?) -> Void)?
     var updateLoadingState: ((Bool) -> Void)?
@@ -37,10 +45,11 @@ class AdsViewModel {
         self.apiService = apiService
     }
 
+    // Fetches ads and updates the UI
     func loadAds() {
         isLoading = true
         apiService.fetchAds { [weak self] result in
-            guard let self = self else {return}
+            guard let self = self else { return }
             self.isLoading = false
 
             switch result {
@@ -54,12 +63,13 @@ class AdsViewModel {
         }
     }
 
+    // Fetches categories and updates the UI
     func loadCategories() {
         isLoading = true
         apiService.fetchCategories { [weak self] result in
-            guard let self = self else {return}
+            guard let self = self else { return }
             self.isLoading = false
-            
+
             switch result {
             case .success(let categories):
                 if !categories.isEmpty {
@@ -71,4 +81,3 @@ class AdsViewModel {
         }
     }
 }
-
