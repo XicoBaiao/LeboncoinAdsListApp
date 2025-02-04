@@ -15,19 +15,34 @@ class AdsViewModel {
         }
     }
     var categories: [Category] = []
-    var errorMessage: String?
+    var errorMessage: String? {
+        didSet {
+            showErrorMessage?(errorMessage)
+        }
+    }
+
+    var isLoading: Bool = false {
+        didSet {
+            updateLoadingState?(isLoading)
+        }
+    }
 
     private let apiService: APIServiceProtocol
 
     var reloadTableView: (() -> Void)?
+    var showErrorMessage: ((String?) -> Void)?
+    var updateLoadingState: ((Bool) -> Void)?
 
     init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
     }
 
     func loadAds() {
+        isLoading = true
         apiService.fetchAds { [weak self] result in
             guard let self = self else {return}
+            self.isLoading = false
+
             switch result {
             case .success(let ads):
                 if !ads.isEmpty {
@@ -40,8 +55,11 @@ class AdsViewModel {
     }
 
     func loadCategories() {
+        isLoading = true
         apiService.fetchCategories { [weak self] result in
             guard let self = self else {return}
+            self.isLoading = false
+            
             switch result {
             case .success(let categories):
                 if !categories.isEmpty {

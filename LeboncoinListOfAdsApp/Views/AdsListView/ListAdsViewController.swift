@@ -13,12 +13,16 @@ class ListAdsViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = AdsViewModel()
     private var collectionView: UICollectionView!
+    private var emptyStateView: UIView!
+    private var activityIndicator: UIActivityIndicatorView!
 
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupCollectionView()
+        setupEmptyStateView()
+        setupActivityIndicator()
         setupBindings()
         fetchData()
     }
@@ -42,6 +46,25 @@ class ListAdsViewController: UIViewController {
         viewModel.reloadTableView = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
+                self?.updateEmptyStateView()
+            }
+        }
+
+        viewModel.showErrorMessage = { [weak self] message in
+            guard let self = self, let message = message else { return }
+            DispatchQueue.main.async {
+                self.showErrorAlert(message: message)
+                self.updateEmptyStateView()
+            }
+        }
+
+        viewModel.updateLoadingState = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                if isLoading {
+                    self?.activityIndicator.startAnimating()
+                } else {
+                    self?.activityIndicator.stopAnimating()
+                }
             }
         }
     }
@@ -68,6 +91,71 @@ class ListAdsViewController: UIViewController {
         view.addSubview(collectionView)
     }
 
+    private func setupEmptyStateView() {
+        emptyStateView = UIView()
+        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateView.isHidden = true
+        view.addSubview(emptyStateView)
+
+        let imageView = UIImageView(image: UIImage(systemName: "exclamationmark.circle"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .gray
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "No ads available. Tap to retry."
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+
+        emptyStateView.addSubview(imageView)
+        emptyStateView.addSubview(label)
+
+        // Expand emptyStateView to full screen for tap detection
+        NSLayoutConstraint.activate([
+            emptyStateView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyStateView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        // Center the content (icon + text) inside emptyStateView
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: emptyStateView.centerYAnchor, constant: -20), // Slightly above center
+            imageView.widthAnchor.constraint(equalToConstant: 50),
+            imageView.heightAnchor.constraint(equalToConstant: 50),
+
+            label.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
+            label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            label.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor, constant: -20)
+        ])
+
+        // Enable tap gesture for retry
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(refreshAds))
+        emptyStateView.addGestureRecognizer(tapGesture)
+        emptyStateView.isUserInteractionEnabled = true
+    }
+
+    private func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     // MARK: - Data Fetching
     private func fetchData() {
         viewModel.loadAds()
@@ -78,6 +166,14 @@ class ListAdsViewController: UIViewController {
         ImageCacheManager.shared.clearCache()
         viewModel.loadAds()
         collectionView.refreshControl?.endRefreshing()
+        updateEmptyStateView()
+    }
+
+    // MARK: - Show/Hide Empty State View
+    private func updateEmptyStateView() {
+        let isEmpty = viewModel.ads.isEmpty
+        emptyStateView.isHidden = !isEmpty
+        collectionView.isHidden = isEmpty
     }
 }
 

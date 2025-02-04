@@ -89,7 +89,7 @@ class APIService: APIServiceProtocol {
             .sink { completed in
                 switch completed {
                 case .finished:
-                    print("Request finished")
+                    break
                 case .failure(let error):
                     completion(.failure(error))
                 }
@@ -133,7 +133,7 @@ class APIService: APIServiceProtocol {
             .sink { completed in
                 switch completed {
                 case .finished:
-                    print("Request finished")
+                    break
                 case .failure(let error):
                     completion(.failure(error))
                 }
