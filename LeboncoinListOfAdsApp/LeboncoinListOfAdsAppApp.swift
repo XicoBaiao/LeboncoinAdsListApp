@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct LeboncoinListOfAdsAppApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+    init() {
+        ImageCacheManager.shared.clearCacheIfNeeded() // Clear cache if 24h passed
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            UIViewControllerWrapper(viewController: ListAdsViewController())
+                .edgesIgnoringSafeArea(.all) // Extend beyond safe areas
+                .navigationBarHidden(true)
         }
     }
 }

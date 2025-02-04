@@ -8,12 +8,18 @@
 import Foundation
 import SwiftUI
 
-class AdsViewModel: ObservableObject {
-    @Published var ads: [Ad] = []
-    @Published var categories: [Category] = []
-    @Published var errorMessage: String?
+class AdsViewModel {
+    var ads: [Ad] = [] {
+        didSet {
+            reloadTableView?()
+        }
+    }
+    var categories: [Category] = []
+    var errorMessage: String?
 
     private let apiService: APIServiceProtocol
+
+    var reloadTableView: (() -> Void)?
 
     init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
