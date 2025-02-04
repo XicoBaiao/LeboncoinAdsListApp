@@ -7,4 +7,9 @@
 
 import UIKit
 
-class AppDelegate: UIResponder, UIApplicationDelegate {}
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        print("⚠️ Memory warning received, clearing image cache...")
+        ImageCacheManager.shared.clearCache()
+    }
+}
