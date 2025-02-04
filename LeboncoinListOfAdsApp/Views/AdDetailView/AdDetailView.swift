@@ -112,6 +112,8 @@ struct AdDetailView: View {
             .padding(.leading, 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .fullScreenCover(isPresented: $isImageFullScreen) {
+            FullScreenImageView(imageURL: ad.imagesUrl.thumb ?? "") // Open full-screen view
+        }
     }
 }
-
