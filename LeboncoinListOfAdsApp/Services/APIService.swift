@@ -10,13 +10,31 @@ import Combine
 
 enum NetworkError: Error {
     case badURL
-    case decodingFailed
     case noData
     case unknown
     case serverError
     case badRequest
     case notAuthorized
     case notFound
+
+    var errorMessage: String {
+        switch self {
+        case .notFound:
+            return "Endpoint not found"
+        case .badURL:
+            return "Bad URL"
+        case .badRequest:
+            return "Bad Request"
+        case .serverError:
+            return "Server error"
+        case .notAuthorized:
+            return "Not authorized"
+        case .noData:
+            return "No Data in the response"
+        default:
+            return "An error occurred"
+        }
+    }
 }
 
 enum APIConfig {

@@ -34,18 +34,7 @@ class AdsViewModel {
                     self.ads = ads
                 }
             case .failure(let error):
-                switch error {
-                case NetworkError.notFound:
-                    self.errorMessage = "Endpoint not found"
-                case NetworkError.badRequest:
-                    self.errorMessage = "Bad Request"
-                case NetworkError.serverError:
-                    self.errorMessage = "Server error"
-                case NetworkError.notAuthorized:
-                    self.errorMessage = "Not authorized"
-                default:
-                    self.errorMessage = "An error occurred"
-                }
+                self.errorMessage = (error as? NetworkError)?.errorMessage ?? "An error occurred"
             }
         }
     }
@@ -59,18 +48,7 @@ class AdsViewModel {
                     self.categories = categories
                 }
             case .failure(let error):
-                switch error {
-                case NetworkError.notFound:
-                    self.errorMessage = "Endpoint not found"
-                case NetworkError.badRequest:
-                    self.errorMessage = "Bad Request"
-                case NetworkError.serverError:
-                    self.errorMessage = "Server error"
-                case NetworkError.notAuthorized:
-                    self.errorMessage = "Not authorized"
-                default:
-                    self.errorMessage = "An error occurred"
-                }
+                self.errorMessage = (error as? NetworkError)?.errorMessage ?? "An error occurred"
             }
         }
     }
