@@ -8,20 +8,22 @@
 import UIKit
 import SwiftUI
 
-// ViewController responsible for displaying a list of ads.
+// ViewController responsible for displaying categories and ads.
 class ListAdsViewController: UIViewController {
 
-    // ViewModel for handling business logic
+    // ViewModel for managing data
     let viewModel = AdsViewModel()
 
     // UI Components
-    var collectionView: UICollectionView!  // Displays the list of ads
-    var emptyStateView: UIView!  // View shown when no ads are available
-    var activityIndicator: UIActivityIndicatorView!  // Shows a loading animation
+    var categoryCollectionView: UICollectionView! // Horizontal category scroll
+    var collectionView: UICollectionView! // Grid of ads
+    var emptyStateView: UIView! // Shown when no ads are available
+    var activityIndicator: UIActivityIndicatorView! // Loading animation
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupCategoryCollectionView()
         setupCollectionView()
         setupEmptyStateView()
         setupActivityIndicator()
@@ -41,11 +43,10 @@ class ListAdsViewController: UIViewController {
 
     // Fetches ads and categories from ViewModel
     private func fetchData() {
-        viewModel.loadAds()
         viewModel.loadCategories()
+        viewModel.loadAds()
     }
 
-    // Refreshes ads and clears cache when user pulls to refresh
     @objc func refreshAds() {
         ImageCacheManager.shared.clearCache()
         viewModel.loadAds()

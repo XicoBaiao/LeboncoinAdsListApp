@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "category_all_products.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

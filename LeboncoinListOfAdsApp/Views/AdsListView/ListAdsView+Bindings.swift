@@ -9,12 +9,17 @@ import UIKit
 
 extension ListAdsViewController {
 
-    // Binds the ViewModel's updates to the UI
     func setupBindings() {
         viewModel.reloadTableView = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
                 self?.updateEmptyStateView()
+            }
+        }
+
+        viewModel.reloadCategories = { [weak self] in
+            DispatchQueue.main.async {
+                self?.categoryCollectionView.reloadData()
             }
         }
 
@@ -28,11 +33,7 @@ extension ListAdsViewController {
 
         viewModel.updateLoadingState = { [weak self] isLoading in
             DispatchQueue.main.async {
-                if isLoading {
-                    self?.activityIndicator.startAnimating()
-                } else {
-                    self?.activityIndicator.stopAnimating()
-                }
+                isLoading ? self?.activityIndicator.startAnimating() : self?.activityIndicator.stopAnimating()
             }
         }
     }

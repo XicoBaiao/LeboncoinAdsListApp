@@ -14,15 +14,40 @@ extension ListAdsViewController {
         title = "Classified Ads"
     }
 
-    // Configures the collection view layout and properties
+    // Configures the horizontal category collection view
+    func setupCategoryCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
+        categoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        categoryCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        categoryCollectionView.delegate = self
+        categoryCollectionView.dataSource = self
+        categoryCollectionView.showsHorizontalScrollIndicator = false
+        categoryCollectionView.backgroundColor = .clear
+        categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
+
+        view.addSubview(categoryCollectionView)
+
+        NSLayoutConstraint.activate([
+            categoryCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            categoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            categoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            categoryCollectionView.heightAnchor.constraint(equalToConstant: 110)
+        ])
+    }
+
+    // Configures the main collection view (grid for ads)
     func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: (view.frame.width - 30) / 2, height: 250)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -35,6 +60,13 @@ extension ListAdsViewController {
         collectionView.refreshControl?.addTarget(self, action: #selector(refreshAds), for: .valueChanged)
 
         view.addSubview(collectionView)
+
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 10),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     // Configures an empty state view for when no ads are available
@@ -100,7 +132,7 @@ extension ListAdsViewController {
 
     // Shows or hides the empty state view based on whether there are ads
     func updateEmptyStateView() {
-        let isEmpty = viewModel.ads.isEmpty
+        let isEmpty = viewModel.allAds.isEmpty
         emptyStateView.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
     }

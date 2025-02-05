@@ -77,8 +77,8 @@ class AdsViewModelTests: XCTestCase {
         viewModel.loadAds()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertEqual(self.viewModel.ads.count, 1)
-            XCTAssertEqual(self.viewModel.ads.first?.title, "Test Ad")
+            XCTAssertEqual(self.viewModel.filteredAds.count, 1)
+            XCTAssertEqual(self.viewModel.filteredAds.first?.title, "Test Ad")
             expectation.fulfill()
         }
 
@@ -114,8 +114,8 @@ class AdsViewModelTests: XCTestCase {
         viewModel.loadCategories()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertEqual(self.viewModel.categories.count, 1)
-            XCTAssertEqual(self.viewModel.categories.first?.name, "Tech")
+            XCTAssertEqual(self.viewModel.categories.count, 2)
+            XCTAssertEqual(self.viewModel.categories[1].name, "Tech")
             expectation.fulfill()
         }
 
