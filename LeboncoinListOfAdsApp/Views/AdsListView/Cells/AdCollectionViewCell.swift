@@ -10,14 +10,22 @@ import UIKit
 class AdCollectionViewCell: UICollectionViewCell {
     static let identifier = "AdCollectionViewCell"
 
+    private var imageURL: URL?
+
     private let adImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.layer.masksToBounds = true
-        imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return imageView
+    }()
+
+    // Activity Indicator (Loading Spinner)
+    private let activityIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.hidesWhenStopped = true
+        return spinner
     }()
 
     private let titleLabel: UILabel = {
@@ -66,6 +74,7 @@ class AdCollectionViewCell: UICollectionViewCell {
         configureContentView()
 
         contentView.addSubview(adImageView)
+        contentView.addSubview(activityIndicator)
         contentView.addSubview(titleLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(urgentBadge)
@@ -87,18 +96,21 @@ class AdCollectionViewCell: UICollectionViewCell {
 
     private func configureConstraints() {
         adImageView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         urgentBadge.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        let aspectRatioConstraint = adImageView.widthAnchor.constraint(equalTo: adImageView.heightAnchor, multiplier: 1.5) // Adjust the ratio for landscape/portrait since we need to handle multiple types of pictures
-
         NSLayoutConstraint.activate([
             adImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             adImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             adImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            // Center activity indicator inside image view
+            activityIndicator.centerXAnchor.constraint(equalTo: adImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: adImageView.centerYAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: adImageView.bottomAnchor, constant: 5),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
@@ -118,7 +130,7 @@ class AdCollectionViewCell: UICollectionViewCell {
             categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             categoryLabel.bottomAnchor.constraint(equalTo: dateLabel.topAnchor, constant: -5),
 
-            aspectRatioConstraint
+            adImageView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
 
@@ -129,23 +141,23 @@ class AdCollectionViewCell: UICollectionViewCell {
         categoryLabel.text = categoryName
         dateLabel.text = ad.creationDate.formatDate()
 
+        // Show loading indicator while fetching the image
+        activityIndicator.startAnimating()
         // Ensure correct image appears (Prevent flickering)
         adImageView.image = UIImage(named: "image_placeholder")
 
-        // Use `tag` to track requests for correct cell reuse
         if let imageUrlString = ad.imagesUrl.thumb, let url = URL(string: imageUrlString) {
+            self.imageURL = url
             adImageView.tag = ad.id
 
             ImageCacheManager.shared.loadImage(from: url) { [weak self] image in
-                guard let self = self else { return }
+                guard let self = self, self.imageURL == url else { return }
 
                 DispatchQueue.main.async {
-                    if self.adImageView.tag == ad.id {
-                        self.adImageView.image = image ?? UIImage(named: "image_placeholder") // Ensure placeholder is set if image fails
-                    }
+                    self.activityIndicator.stopAnimating()
+                    self.adImageView.image = image ?? UIImage(named: "image_placeholder")
                 }
             }
         }
     }
 }
-
