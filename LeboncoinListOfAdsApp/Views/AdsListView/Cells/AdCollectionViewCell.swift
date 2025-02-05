@@ -103,6 +103,8 @@ class AdCollectionViewCell: UICollectionViewCell {
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
 
+        let aspectRatioConstraint = adImageView.widthAnchor.constraint(equalTo: adImageView.heightAnchor, multiplier: 1.5) // Adjust the ratio for landscape/portrait since we need to handle multiple types of pictures
+
         NSLayoutConstraint.activate([
             adImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             adImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -130,7 +132,7 @@ class AdCollectionViewCell: UICollectionViewCell {
             categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             categoryLabel.bottomAnchor.constraint(equalTo: dateLabel.topAnchor, constant: -5),
 
-            adImageView.heightAnchor.constraint(equalToConstant: 140)
+            aspectRatioConstraint
         ])
     }
 
@@ -146,9 +148,9 @@ class AdCollectionViewCell: UICollectionViewCell {
         // Ensure correct image appears (Prevent flickering)
         adImageView.image = UIImage(named: "image_placeholder")
 
+        // Use 'tag'
         if let imageUrlString = ad.imagesUrl.thumb, let url = URL(string: imageUrlString) {
             self.imageURL = url
-            adImageView.tag = ad.id
 
             ImageCacheManager.shared.loadImage(from: url) { [weak self] image in
                 guard let self = self, self.imageURL == url else { return }
