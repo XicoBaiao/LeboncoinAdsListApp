@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+// Possible network errors
 enum NetworkError: Error {
     case badURL
     case noData
@@ -41,11 +42,13 @@ enum APIConfig {
     static let baseURL = "https://raw.githubusercontent.com/leboncoin/paperclip/master/"
 }
 
+// API fetching functionality
 protocol APIServiceProtocol {
     func fetchAds(completion: @escaping (Result<[Ad], Error>) -> Void)
     func fetchCategories(completion: @escaping (Result<[Category], Error>) -> Void)
 }
 
+// Handles API calls to fetch ads and categories
 class APIService: APIServiceProtocol {
     static let shared = APIService()
 
@@ -53,6 +56,7 @@ class APIService: APIServiceProtocol {
 
     var cancellables = Set<AnyCancellable>()
 
+    // Fetches ads from API
     func fetchAds(completion: @escaping ((Result<[Ad], Error>) -> Void)) {
 
         guard let url = URL(string: APIConfig.baseURL + "listing.json") else {
@@ -99,6 +103,7 @@ class APIService: APIServiceProtocol {
             .store(in: &cancellables)
     }
 
+    // Fetches categories from API
     func fetchCategories(completion: @escaping ((Result<[Category],Error>) -> Void)) {
         guard let url = URL(string: APIConfig.baseURL + "categories.json") else {
             completion(.failure(NetworkError.badURL))

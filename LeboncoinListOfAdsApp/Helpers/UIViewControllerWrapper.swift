@@ -8,10 +8,12 @@
 import UIKit
 import SwiftUI
 
+// Wrapper to use a UIViewController inside a SwiftUI View
 struct UIViewControllerWrapper: UIViewControllerRepresentable {
     let viewController: UIViewController
 
     func makeUIViewController(context: Context) -> UIViewController {
+        // Embed the view controller inside a navigation controller
         let navigationController = UINavigationController(rootViewController: viewController)
         return navigationController
     }

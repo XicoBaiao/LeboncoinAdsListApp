@@ -134,7 +134,7 @@ class AdCollectionViewCell: UICollectionViewCell {
 
         // Use `tag` to track requests for correct cell reuse
         if let imageUrlString = ad.imagesUrl.thumb, let url = URL(string: imageUrlString) {
-            adImageView.tag = ad.id // Track requests for correct cell reuse
+            adImageView.tag = ad.id
 
             ImageCacheManager.shared.loadImage(from: url) { [weak self] image in
                 guard let self = self else { return }

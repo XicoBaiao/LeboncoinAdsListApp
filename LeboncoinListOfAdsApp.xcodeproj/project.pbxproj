@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
+		332A00732D53A59F00A3899C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33B28C8A2D4FBA9700E7F3B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33B28C912D4FBA9700E7F3B3;
+			remoteInfo = LeboncoinListOfAdsApp;
+		};
 		33B28CA32D4FBA9A00E7F3B3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33B28C8A2D4FBA9700E7F3B3 /* Project object */;
@@ -17,11 +24,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		332A006D2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeboncoinListOfAdsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33B28C922D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeboncoinListOfAdsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33B28CA22D4FBA9A00E7F3B3 /* LeboncoinListOfAdsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeboncoinListOfAdsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		332A006E2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LeboncoinListOfAdsAppUITests;
+			sourceTree = "<group>";
+		};
 		33B28C942D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LeboncoinListOfAdsApp;
@@ -32,14 +45,16 @@
 			path = LeboncoinListOfAdsAppTests;
 			sourceTree = "<group>";
 		};
-		33B28CAF2D4FBA9A00E7F3B3 /* LeboncoinListOfAdsAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = LeboncoinListOfAdsAppUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		332A006A2D53A59F00A3899C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		33B28C8F2D4FBA9700E7F3B3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -62,7 +77,7 @@
 			children = (
 				33B28C942D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp */,
 				33B28CA52D4FBA9A00E7F3B3 /* LeboncoinListOfAdsAppTests */,
-				33B28CAF2D4FBA9A00E7F3B3 /* LeboncoinListOfAdsAppUITests */,
+				332A006E2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests */,
 				33B28C932D4FBA9700E7F3B3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -72,6 +87,7 @@
 			children = (
 				33B28C922D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp.app */,
 				33B28CA22D4FBA9A00E7F3B3 /* LeboncoinListOfAdsAppTests.xctest */,
+				332A006D2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -79,6 +95,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		332A006C2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 332A00752D53A59F00A3899C /* Build configuration list for PBXNativeTarget "LeboncoinListOfAdsAppUITests" */;
+			buildPhases = (
+				332A00692D53A59F00A3899C /* Sources */,
+				332A006A2D53A59F00A3899C /* Frameworks */,
+				332A006B2D53A59F00A3899C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				332A00742D53A59F00A3899C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				332A006E2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests */,
+			);
+			name = LeboncoinListOfAdsAppUITests;
+			packageProductDependencies = (
+			);
+			productName = LeboncoinListOfAdsAppUITests;
+			productReference = 332A006D2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		33B28C912D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 33B28CB62D4FBA9A00E7F3B3 /* Build configuration list for PBXNativeTarget "LeboncoinListOfAdsApp" */;
@@ -134,6 +173,10 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					332A006C2D53A59F00A3899C = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 33B28C912D4FBA9700E7F3B3;
+					};
 					33B28C912D4FBA9700E7F3B3 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -159,11 +202,19 @@
 			targets = (
 				33B28C912D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp */,
 				33B28CA12D4FBA9A00E7F3B3 /* LeboncoinListOfAdsAppTests */,
+				332A006C2D53A59F00A3899C /* LeboncoinListOfAdsAppUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		332A006B2D53A59F00A3899C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		33B28C902D4FBA9700E7F3B3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -181,6 +232,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		332A00692D53A59F00A3899C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		33B28C8E2D4FBA9700E7F3B3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -198,6 +256,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		332A00742D53A59F00A3899C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33B28C912D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp */;
+			targetProxy = 332A00732D53A59F00A3899C /* PBXContainerItemProxy */;
+		};
 		33B28CA42D4FBA9A00E7F3B3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 33B28C912D4FBA9700E7F3B3 /* LeboncoinListOfAdsApp */;
@@ -206,6 +269,40 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		332A00762D53A59F00A3899C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L9ACG2Q9X9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BaiaoLtda.LeboncoinListOfAdsAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LeboncoinListOfAdsApp;
+			};
+			name = Debug;
+		};
+		332A00772D53A59F00A3899C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L9ACG2Q9X9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BaiaoLtda.LeboncoinListOfAdsAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LeboncoinListOfAdsApp;
+			};
+			name = Release;
+		};
 		33B28CB42D4FBA9A00E7F3B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -422,6 +519,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		332A00752D53A59F00A3899C /* Build configuration list for PBXNativeTarget "LeboncoinListOfAdsAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				332A00762D53A59F00A3899C /* Debug */,
+				332A00772D53A59F00A3899C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		33B28C8D2D4FBA9700E7F3B3 /* Build configuration list for PBXProject "LeboncoinListOfAdsApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

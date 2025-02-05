@@ -114,7 +114,7 @@ class AdsViewModelTests: XCTestCase {
         viewModel.loadCategories()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertEqual(self.viewModel.categories.count, 2)
+            XCTAssertEqual(self.viewModel.categories.count, 3)
             XCTAssertEqual(self.viewModel.categories[1].name, "Tech")
             expectation.fulfill()
         }

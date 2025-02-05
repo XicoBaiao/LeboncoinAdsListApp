@@ -16,7 +16,7 @@ class ListAdsViewController: UIViewController {
 
     // UI Components
     var categoryCollectionView: UICollectionView! // Horizontal category scroll
-    var collectionView: UICollectionView! // Grid of ads
+    var adsCollectionView: UICollectionView! // Grid of ads
     var emptyStateView: UIView! // Shown when no ads are available
     var activityIndicator: UIActivityIndicatorView! // Loading animation
 
@@ -24,7 +24,7 @@ class ListAdsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupCategoryCollectionView()
-        setupCollectionView()
+        setupAdsCollectionView()
         setupEmptyStateView()
         setupActivityIndicator()
         setupBindings()
@@ -42,7 +42,7 @@ class ListAdsViewController: UIViewController {
     }
 
     // Fetches ads and categories from ViewModel
-    private func fetchData() {
+    @objc func fetchData() {
         viewModel.loadCategories()
         viewModel.loadAds()
     }
@@ -50,7 +50,7 @@ class ListAdsViewController: UIViewController {
     @objc func refreshAds() {
         ImageCacheManager.shared.clearCache()
         viewModel.loadAds()
-        collectionView.refreshControl?.endRefreshing()
+        adsCollectionView.refreshControl?.endRefreshing()
         updateEmptyStateView()
     }
 }

@@ -7,12 +7,13 @@
 
 import UIKit
 
+// Handle all callbacks from viewModel
 extension ListAdsViewController {
 
     func setupBindings() {
         viewModel.reloadTableView = { [weak self] in
             DispatchQueue.main.async {
-                self?.collectionView.reloadData()
+                self?.adsCollectionView.reloadData()
                 self?.updateEmptyStateView()
             }
         }

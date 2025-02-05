@@ -13,10 +13,10 @@ struct FullScreenImageView: View {
 
     var body: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all) // Background
+            Color.black.edgesIgnoringSafeArea(.all)
 
             CachedAsyncImage(urlString: imageURL, placeholder: Image("image_placeholder"))
-                .scaledToFit() // Keep original aspect ratio
+                .scaledToFit()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black)
                 .edgesIgnoringSafeArea(.all)

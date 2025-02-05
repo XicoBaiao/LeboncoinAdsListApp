@@ -36,7 +36,7 @@ extension ListAdsViewController: UICollectionViewDataSource, UICollectionViewDel
             viewModel.selectedCategoryId = selectedCategory.id
             
             DispatchQueue.main.async {
-                self.collectionView.setContentOffset(.zero, animated: true) // Scroll to top
+                self.adsCollectionView.setContentOffset(.zero, animated: true) // Scroll to top
             }
         } else {
             let ad = viewModel.filteredAds[indexPath.row]

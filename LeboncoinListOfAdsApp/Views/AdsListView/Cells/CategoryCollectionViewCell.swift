@@ -7,15 +7,35 @@
 
 import UIKit
 
+enum CategoryIconMapper {
+    static func imageName(for categoryName: String) -> String {
+        switch categoryName {
+        case "Tous les produits": return "category_all_products"
+        case "Véhicule": return "category_vehicle"
+        case "Mode": return "category_fashion"
+        case "Bricolage": return "category_tools"
+        case "Maison": return "category_home"
+        case "Loisirs": return "category_leisure"
+        case "Immobilier": return "category_real_estate"
+        case "Livres/CD/DVD": return "category_books"
+        case "Multimédia": return "category_multimedia"
+        case "Service": return "category_services"
+        case "Animaux": return "category_pets"
+        case "Enfants": return "category_kids"
+        default: return "image_placeholder"
+        }
+    }
+}
+
 class CategoryCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "CategoryCollectionViewCell"
 
     private let imageContainerView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 35 // Slightly larger than imageView
+        view.layer.cornerRadius = 35
         view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.darkGray.cgColor // Border color
+        view.layer.borderColor = UIColor.darkGray.cgColor
         view.layer.masksToBounds = true
         return view
     }()
@@ -25,7 +45,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 30
         imageView.layer.masksToBounds = true
-        imageView.backgroundColor = .white // Keep white background
+        imageView.backgroundColor = .white
         return imageView
     }()
 
@@ -52,7 +72,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             imageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            imageContainerView.widthAnchor.constraint(equalToConstant: 70), // Slightly larger
+            imageContainerView.widthAnchor.constraint(equalToConstant: 70),
             imageContainerView.heightAnchor.constraint(equalToConstant: 70),
 
             imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
@@ -72,26 +92,6 @@ class CategoryCollectionViewCell: UICollectionViewCell {
 
     func configure(with category: Category) {
         titleLabel.text = category.name
-        imageView.image = UIImage(named: imageName(for: category.name)) ?? UIImage(named: "image_placeholder")
-    }
-
-    /// Maps category names to the corresponding image asset names.
-    private func imageName(for categoryName: String) -> String {
-        let categoryMap: [String: String] = [
-            "Tous les produits": "category_all_products",
-            "Véhicule": "category_vehicle",
-            "Mode": "category_fashion",
-            "Bricolage": "category_tools",
-            "Maison": "category_home",
-            "Loisirs": "category_leisure",
-            "Immobilier": "category_real_estate",
-            "Livres/CD/DVD": "category_books",
-            "Multimédia": "category_multimedia",
-            "Service": "category_services",
-            "Animaux": "category_pets",
-            "Enfants": "category_kids"
-        ]
-
-        return categoryMap[categoryName] ?? "image_placeholder"
+        imageView.image = UIImage(named: CategoryIconMapper.imageName(for: category.name)) ?? UIImage(named: "image_placeholder")
     }
 }

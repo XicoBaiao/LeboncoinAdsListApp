@@ -2,32 +2,50 @@
 //  LeboncoinListOfAdsAppUITestsLaunchTests.swift
 //  LeboncoinListOfAdsAppUITests
 //
-//  Created by Francisco Baião on 02/02/2025.
+//  Created by Francisco Baião on 05/02/2025.
 //
 
 import XCTest
 
 final class LeboncoinListOfAdsAppUITestsLaunchTests: XCTestCase {
 
-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
-        true
-    }
+    let app = XCUIApplication()
 
-    override func setUpWithError() throws {
+    override func setUp() {
+        super.setUp()
         continueAfterFailure = false
+        app.launch()
     }
 
-    @MainActor
-    func testLaunch() throws {
-        let app = XCUIApplication()
-        app.launch()
+    func testCategoriesListIsDisplayed() {
+        let collectionView = app.collectionViews.firstMatch
+        XCTAssertTrue(collectionView.waitForExistence(timeout: 5), "Categories list did not load")
+    }
 
-        // Insert steps here to perform after app launch but before taking a screenshot,
-        // such as logging into a test account or navigating somewhere in the app
+    func testTapOnAdOpensDetailScreen() {
+        // Find the ads collection view first
+        let adsCollectionView = app.collectionViews.element(boundBy: 1)
 
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = "Launch Screen"
-        attachment.lifetime = .keepAlways
-        add(attachment)
+        let firstAd = adsCollectionView.cells.element(boundBy: 0)
+        XCTAssertTrue(firstAd.waitForExistence(timeout: 5), "First ad not found")
+
+        firstAd.tap()
+
+        let detailTitle = app.staticTexts["Description"]
+        XCTAssertTrue(detailTitle.waitForExistence(timeout: 5), "Detail screen did not open")
+    }
+
+
+    func testCategoryFilter() {
+        let categoryCollectionView = app.collectionViews.element(boundBy: 0)
+        XCTAssertTrue(categoryCollectionView.waitForExistence(timeout: 5), "Category collection view not found")
+
+        let firstCategory = categoryCollectionView.cells.element(boundBy: 1)
+        XCTAssertTrue(firstCategory.exists, "First category does not exist")
+        firstCategory.tap()
+
+        // Check if ads list updated
+        let adCollectionView = app.collectionViews.element(boundBy: 1)
+        XCTAssertTrue(adCollectionView.waitForExistence(timeout: 5), "Ads list did not update after selecting category")
     }
 }

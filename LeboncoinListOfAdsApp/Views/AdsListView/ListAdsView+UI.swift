@@ -40,36 +40,36 @@ extension ListAdsViewController {
     }
 
     // Configures the main collection view (grid for ads)
-    func setupCollectionView() {
+    func setupAdsCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: (view.frame.width - 30) / 2, height: 250)
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = .gray.withAlphaComponent(0.2)
-        collectionView.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
+        adsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        adsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        adsCollectionView.delegate = self
+        adsCollectionView.dataSource = self
+        adsCollectionView.showsVerticalScrollIndicator = false
+        adsCollectionView.backgroundColor = .gray.withAlphaComponent(0.2)
+        adsCollectionView.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
 
         // Enables pull-to-refresh feature
-        collectionView.refreshControl = UIRefreshControl()
-        collectionView.refreshControl?.addTarget(self, action: #selector(refreshAds), for: .valueChanged)
+        adsCollectionView.refreshControl = UIRefreshControl()
+        adsCollectionView.refreshControl?.addTarget(self, action: #selector(refreshAds), for: .valueChanged)
 
-        view.addSubview(collectionView)
+        view.addSubview(adsCollectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            adsCollectionView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 10),
+            adsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            adsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            adsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
-    // Configures an empty state view for when no ads are available
+    // Reusable empty state view for both cases: No ads at all OR No ads for category
     func setupEmptyStateView() {
         emptyStateView = UIView()
         emptyStateView.translatesAutoresizingMaskIntoConstraints = false
@@ -82,9 +82,9 @@ extension ListAdsViewController {
 
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "No ads available. Tap to retry."
         label.textColor = .gray
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
 
         emptyStateView.addSubview(imageView)
@@ -110,11 +110,44 @@ extension ListAdsViewController {
             label.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor, constant: 20),
             label.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor, constant: -20)
         ])
+    }
 
-        // Adds tap gesture to retry loading ads
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(refreshAds))
+    // Updates the empty state view dynamically
+    func updateEmptyStateView() {
+        let noAds = viewModel.allAds.isEmpty
+        let noAdsForCategory = viewModel.filteredAds.isEmpty
+
+        emptyStateView.isHidden = !(noAds || noAdsForCategory)
+        adsCollectionView.isHidden = noAdsForCategory
+
+        if noAds {
+            showEmptyStateMessage("No ads available. Tap to retry.")
+            addTapGestureToEmptyState()
+        } else if noAdsForCategory {
+            showEmptyStateMessage("No ads for this category. Please choose a different one.")
+            removeTapGestureFromEmptyState()
+        }
+    }
+
+    // Updates the message displayed in the empty state view
+    private func showEmptyStateMessage(_ message: String) {
+        if let label = emptyStateView.subviews.compactMap({ $0 as? UILabel }).first {
+            label.text = message
+        }
+    }
+
+    // Adds tap gesture ONLY when no ads exist at all
+    private func addTapGestureToEmptyState() {
+        removeTapGestureFromEmptyState() // Ensure we remove any previous gestures
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(fetchData))
         emptyStateView.addGestureRecognizer(tapGesture)
         emptyStateView.isUserInteractionEnabled = true
+    }
+
+    // Removes tap gesture when no ads exist for a category (prevents unnecessary API calls)
+    private func removeTapGestureFromEmptyState() {
+        emptyStateView.gestureRecognizers?.forEach { emptyStateView.removeGestureRecognizer($0) }
+        emptyStateView.isUserInteractionEnabled = false
     }
 
     // Configures and positions the activity indicator (loading spinner)
@@ -128,13 +161,6 @@ extension ListAdsViewController {
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-    }
-
-    // Shows or hides the empty state view based on whether there are ads
-    func updateEmptyStateView() {
-        let isEmpty = viewModel.allAds.isEmpty
-        emptyStateView.isHidden = !isEmpty
-        collectionView.isHidden = isEmpty
     }
 
     // Displays an error alert message

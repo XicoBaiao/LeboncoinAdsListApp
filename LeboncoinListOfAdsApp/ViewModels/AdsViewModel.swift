@@ -12,61 +12,70 @@ import SwiftUI
 class AdsViewModel {
     // List of all ads
     var allAds: [Ad] = []
-
+    
     // List of filtered ads (based on selected category)
     var filteredAds: [Ad] = [] {
         didSet {
             reloadTableView?()
         }
     }
-
+    
     // List of categories
     var categories: [Category] = [] {
         didSet {
             reloadCategories?()
         }
     }
-
+    
     // Tracks errors and notifies the UI
     var errorMessage: String? {
         didSet {
             showErrorMessage?(errorMessage)
         }
     }
-
+    
     // Tracks whether data is being loaded
     var isLoading: Bool = false {
         didSet {
             updateLoadingState?(isLoading)
         }
     }
-
+    
     // Stores the currently selected category (default: show all)
     var selectedCategoryId: Int? {
         didSet {
             filterAds()
         }
     }
-
+    
     private let apiService: APIServiceProtocol
-
+    
     // Callbacks to update UI
     var reloadTableView: (() -> Void)?
     var reloadCategories: (() -> Void)?
     var showErrorMessage: ((String?) -> Void)?
     var updateLoadingState: ((Bool) -> Void)?
-
+    
+    private var isFetchingAds = false
+    private var isFetchingCategories = false
+    
     init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
     }
-
+    
     // Fetches ads and updates the UI
     func loadAds() {
+        guard !isFetchingAds else { return } // Prevent multiple requests
+        
+        isFetchingAds = true
         isLoading = true
+        
         apiService.fetchAds { [weak self] result in
             guard let self = self else { return }
+            
+            self.isFetchingAds = false
             self.isLoading = false
-
+            
             switch result {
             case .success(let ads):
                 self.allAds = ads
@@ -77,18 +86,30 @@ class AdsViewModel {
             }
         }
     }
-
+    
     // Fetches categories and updates the UI
     func loadCategories() {
+        guard !isFetchingCategories else { return } // Prevent multiple requests
+        
+        isFetchingCategories = true
         isLoading = true
+        
         apiService.fetchCategories { [weak self] result in
             guard let self = self else { return }
+            
+            self.isFetchingCategories = false
             self.isLoading = false
-
+            
             switch result {
             case .success(var categories):
                 let allProductsCategory = Category(id: 0, name: "Tous les produits") // "All Products"
                 categories.insert(allProductsCategory, at: 0) // Always first
+                
+                // ✅ Add a test category with no ads
+                let testCategory = Category(id: 999, name: "Empty Category")
+                categories.append(testCategory)
+                
+                
                 self.categories = categories
                 self.reloadCategories?()
             case .failure(let error):
@@ -96,7 +117,7 @@ class AdsViewModel {
             }
         }
     }
-
+    
     // Filters ads based on the selected category
     func filterAds() {
         if let categoryId = selectedCategoryId, categoryId != 0 {

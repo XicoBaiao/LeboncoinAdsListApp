@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Mock API service for testing purposes
 class MockAPIService: APIServiceProtocol {
     var shouldReturnError: Bool
     var mockAds: [Ad] = []

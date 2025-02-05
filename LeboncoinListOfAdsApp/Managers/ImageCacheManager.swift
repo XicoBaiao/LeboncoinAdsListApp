@@ -7,13 +7,14 @@
 
 import UIKit
 
+// Manages image caching to improve performance and reduce network calls
 class ImageCacheManager {
     static let shared = ImageCacheManager()
 
     private let cache = NSCache<NSURL, UIImage>()
 
     private init() {
-        cache.countLimit = 100
+        cache.countLimit = 100 // images limit
         cache.totalCostLimit = 50 * 1024 * 1024 // 50MB cache
     }
 
@@ -29,6 +30,7 @@ class ImageCacheManager {
         cache.setObject(image, forKey: url as NSURL)
     }
 
+    // Loads an image from cache or fetches it from the network
     func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
         // Check cache first
         if let cachedImage = getImage(for: url) {
@@ -51,7 +53,7 @@ class ImageCacheManager {
 
             // Ensure we have valid image data
             guard let data = data, let image = UIImage(data: data), error == nil else {
-                completion(nil) // Return nil if image loading failed
+                completion(nil)
                 return
             }
 
@@ -68,10 +70,11 @@ class ImageCacheManager {
         cache.removeAllObjects()
     }
 
+    // Clears cache every 24 hours
     func clearCacheIfNeeded() {
         let lastCleared = UserDefaults.standard.double(forKey: "lastCacheClearTime")
         let now = Date().timeIntervalSince1970
-        let twentyFourHours: TimeInterval = 24 * 60 * 60
+        let twentyFourHours: TimeInterval = 24 * 60 * 60 // 24 hours
 
         if now - lastCleared > twentyFourHours {
             clearCache()
