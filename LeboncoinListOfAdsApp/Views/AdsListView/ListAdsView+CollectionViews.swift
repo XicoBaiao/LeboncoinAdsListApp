@@ -51,9 +51,18 @@ extension ListAdsViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == categoryCollectionView {
-            return CGSize(width: 80, height: 100) // Circle with title below
+            return CGSize(width: 80, height: 100)
         } else {
-            return CGSize(width: (view.frame.width - 30) / 2, height: 250)
+            // Adapt UI to be presentable on Iphone and Ipad
+            let isPad = UIDevice.current.userInterfaceIdiom == .pad
+            let itemsPerRow: CGFloat = isPad ? 3 : 2
+            let spacing: CGFloat = 10
+            let totalSpacing = spacing * (itemsPerRow + 1)
+            let availableWidth = view.frame.width - totalSpacing
+            let itemWidth = availableWidth / itemsPerRow
+            let itemHeight = isPad ? itemWidth * 1.1 : itemWidth * 1.3
+
+            return CGSize(width: itemWidth, height: itemHeight)
         }
     }
     
