@@ -1,5 +1,5 @@
 //
-//  LeboncoinListOfAdsAppUITestsLaunchTests.swift
+//  LeboncoinListOfAdsAppUITests.swift
 //  LeboncoinListOfAdsAppUITests
 //
 //  Created by Francisco Baião on 05/02/2025.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class LeboncoinListOfAdsAppUITestsLaunchTests: XCTestCase {
+final class LeboncoinListOfAdsAppUITests: XCTestCase {
 
     let app = XCUIApplication()
 

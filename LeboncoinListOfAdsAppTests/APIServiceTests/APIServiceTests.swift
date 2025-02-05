@@ -38,7 +38,7 @@ class APIServiceTests: XCTestCase {
         apiService.fetchAds { result in
             switch result {
             case .success(let ads):
-                XCTAssertEqual(ads.count, 2) // ✅ Ensure we get 2 ads
+                XCTAssertEqual(ads.count, 2) // Ensure we get 2 ads
                 XCTAssertEqual(ads.first?.title, "Test Ad")
                 XCTAssertEqual(ads.last?.title, "Second Test Ad")
                 expectation.fulfill()
