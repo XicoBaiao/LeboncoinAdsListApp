@@ -48,7 +48,7 @@ This app follows the **MVVM (Model-View-ViewModel)** pattern:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/XicoBaiao/LeboncoinListOfAdsApp.git
+   git clone https://github.com/XicoBaiao/LeboncoinAdsListApp.git
    cd LeboncoinListOfAdsApp
 
 2. **Open the project in Xcode**
