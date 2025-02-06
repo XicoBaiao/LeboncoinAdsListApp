@@ -49,11 +49,11 @@ This app follows the **MVVM (Model-View-ViewModel)** pattern:
 1. **Clone the repository**
    ```bash
    git clone https://github.com/XicoBaiao/LeboncoinAdsListApp.git
-   cd LeboncoinListOfAdsApp
+   cd LeboncoinAdsListApp
 
 2. **Open the project in Xcode**
    ```bash
-   open LeboncoinListOfAdsApp.xcodeproj
+   open LeboncoinAdsListApp.xcodeproj
 
 3. **Run the app on iOS simulator or physical device**
 
